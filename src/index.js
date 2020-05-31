@@ -14,7 +14,7 @@ app.innerHTML = `
             </div>
         </div>
         <form class="todos-form" name="todos">
-            <input type="text" placeholder="What's next?" name="todo" v-on:keydown.enter="$event.stopPropagation()">
+            <input type="text" placeholder="What's next?" name="todo">
         </form>
         <ul class="todos-list"></ul>
     </div>
@@ -24,10 +24,27 @@ app.innerHTML = `
 let todos = [];
 
 // selectors
+const root = document.querySelector('.todos');
+const list = root.querySelector('.todos-list');
 const form = document.forms.todos;
 const input = form.elements.todo;
 
 // functions
+function renderTodos(todos){
+    // <li>
+    let todoString = '';
+    todos.forEach((todo, index) => {
+        todoString +=`
+            <li data-id="${index}">
+                <input type="checkbox">
+                <span>${todo.label}</span>
+                <button type="button"></button>
+            </li>
+        `;
+    });
+    list.innerHTML = todoString;
+}
+
 function addTodo(event){
     event.preventDefault();
     const label = input.value.trim();
@@ -40,7 +57,7 @@ function addTodo(event){
             complete
         }
     ];
-    console.log(todos);
+    renderTodos(todos);
     input.value = '';
 }
 
