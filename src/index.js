@@ -28,6 +28,7 @@ const root = document.querySelector('.todos');
 const list = root.querySelector('.todos-list');
 const count = root.querySelector('.todos-count');
 count.innerText = "0 Items";
+const clear = root.querySelector('.todos-clear');
 const form = document.forms.todos;
 const input = form.elements.todo;
 
@@ -48,6 +49,8 @@ function renderTodos(todos){
     count.innerText = todos.filter(todo => !todo.complete).length;
     let todosCount = parseInt(count.innerText, 10);
     count.innerText += `${ todosCount > 1 ? " Items"  : " Item"}`;
+
+    clear.style.display = todos.filter(todo => todo.complete).length ? 'block': 'none';
 }
 
 function addTodo(event){
@@ -94,6 +97,17 @@ function deleteTodo(event){
     }
 }
 
+function clearCompleteTodos(){
+    const count = todos.filter(todo => todo.complete).length;
+    if(count === 0){
+        return;
+    }
+    if(window.confirm(`Delete ${count} todos?`)){
+        todos = todos.filter(todo => !todo.complete);
+        renderTodos(todos);
+    }
+}
+
 // initialization
 function init(){
     // Add Todo
@@ -102,6 +116,8 @@ function init(){
     list.addEventListener('change', updateTodo);
     // Delete Todo
     list.addEventListener('click', deleteTodo);
+    // Complete all Todos
+    clear.addEventListener('click', clearCompleteTodos);
 }
 
 init();
